@@ -1,17 +1,17 @@
 from pprint import pprint
-from ado_iteration_automation.read_blacklisted_yaml import read_blacklisted_yaml
+from ado_iteration_automation.read_yaml import read_blacklisted_yaml
 from ado_iteration_automation.connection import get_connection
 from ado_iteration_automation.list_projects import get_project_lists
 
 def list_classification_nodes(connection):
-    connection = get_connection()
     wit_client = connection.clients.get_work_item_tracking_client()
     
     projects = get_project_lists(connection)
     all_data = {}
-    
+    blacklist = read_blacklisted_yaml()
+
     for project in projects:
-        if project['id'] not in read_blacklisted_yaml():
+        if project['id'] not in blacklist:
         # while project['id'] not in read_yaml("./data/ado_project_blacklist.yml"):
             try:
                 print(f"Fetching iterations for: {project['name']}...")
@@ -30,5 +30,6 @@ def list_classification_nodes(connection):
                 print(f"Failed to fetch {project['name']}: {e}")
                 all_data[project['name']] = f"Error: {str(e)}"
 
+    # pprint(all_data['AZ-400 Playground']['children'])
     # pprint(all_data['AZ-400 Playground']['attributes'])
     return all_data

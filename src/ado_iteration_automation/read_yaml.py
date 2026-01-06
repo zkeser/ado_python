@@ -3,7 +3,7 @@ from pprint import pprint
 
 def read_blacklisted_yaml():
     current_dir = os.path.dirname(os.path.abspath(__file__))
-    default_path = os.path.join(current_dir, "data", "ado_project_blacklist.yml")
+    default_path = os.path.join(current_dir, "data", "vars.yml")
     with open (default_path, 'r') as file:
         try:
             data = yaml.load(file, Loader=yaml.SafeLoader)
