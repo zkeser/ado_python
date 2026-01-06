@@ -1,0 +1,28 @@
+Fetching iterations for: azure-devops-kubernetes-terraform...
+dict_keys(['url', '_links', 'attributes', 'has_children', 'children', 'id', 'identifier', 'name', 'path', 'structure_type'])
+
+
+    # for project_name, classification_data in list_classification_nodes(get_connection()).items():
+    #     children = classification_data.get('children', [])
+    #     nodes_to_fix = [node for node in children if 'attributes' not in node or 'startDate' not in node['attributes']]
+    #     for node in nodes_to_fix:
+    #         node_name = node['name']
+    #         dates = yaml_lookup.get(node['name'])
+
+    #         if dates:
+    #             updated_node = WorkItemClassificationNode(
+    #                 name=node_name,
+    #                 attributes={
+    #                     "startDate": dates['startDate'],
+    #                     "finishDate": dates['finishDate']
+    #                 }
+    #             )
+                    
+                
+
+    #             try:
+    #                 wit_client.delete_classification_node(updated_node,project_name, "iterations", path=node_name)
+    #                 print(f"Updated node {node_name} in project { project_name} with dates")
+                
+    #             except Exception as e:
+    #                 print(f"Error updating node {node_name} in project {project_name}: {e}")

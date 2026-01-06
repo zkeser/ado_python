@@ -1,5 +1,5 @@
 from pprint import pprint
-from ado_iteration_automation.read_yaml import read_blacklisted_yaml
+from ado_iteration_automation.read_yaml import read_yaml
 from ado_iteration_automation.connection import get_connection
 from ado_iteration_automation.list_projects import get_project_lists
 
@@ -8,7 +8,7 @@ def list_classification_nodes(connection):
     
     projects = get_project_lists(connection)
     all_data = {}
-    blacklist = read_blacklisted_yaml()
+    blacklist = read_yaml("ado_project_blacklist")
 
 
     for project in projects:
