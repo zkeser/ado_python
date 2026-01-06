@@ -7,5 +7,7 @@ from pprint import pprint
 
 if __name__ == "__main__":
     # print(get_project_lists(get_connection()))
-    print(list_classification_nodes(get_connection()))
+    pprint(list_classification_nodes(get_connection()), indent=1)
+    # classifications_list = list_classification_nodes(get_connection())
+    # pprint()
     # read_blacklisted_yaml()

@@ -10,6 +10,7 @@ def list_classification_nodes(connection):
     all_data = {}
     blacklist = read_blacklisted_yaml()
 
+
     for project in projects:
         if project['id'] not in blacklist:
         # while project['id'] not in read_yaml("./data/ado_project_blacklist.yml"):
@@ -29,7 +30,7 @@ def list_classification_nodes(connection):
             except Exception as e:
                 print(f"Failed to fetch {project['name']}: {e}")
                 all_data[project['name']] = f"Error: {str(e)}"
-
-    # pprint(all_data['AZ-400 Playground']['children'])
+    
+    # pprint(all_data['AZ-400 Playground']['children']["name"])
     # pprint(all_data['AZ-400 Playground']['attributes'])
     return all_data
