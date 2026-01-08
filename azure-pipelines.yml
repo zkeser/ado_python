@@ -23,6 +23,10 @@ stages:
             deploy:
               steps:
                 - checkout: self
+                - script: |
+                    python -m pip install --upgrade pip
+                    pip install azure-devops pyyaml
+                  displayName: 'Install Dependencies'
                 - task: PythonScript@0
                   inputs:
                     scriptSource: 'filePath'
