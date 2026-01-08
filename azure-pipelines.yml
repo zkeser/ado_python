@@ -27,4 +27,4 @@ stages:
                   inputs:
                     targetType: 'inline'
                     script: |                      
-                      ls $(Agent.BuildDirectory)
+                      ls .
