@@ -23,8 +23,12 @@ stages:
             deploy:
               steps:
                 - checkout: self
-                - task: Bash@3
+                - task: PythonScript@0
                   inputs:
-                    targetType: 'inline'
-                    script: |                      
-                      ls .
+                    scriptSource: 'filePath'
+                    scriptPath: './src/main.py'
+                  env:
+                    ADO_TOKEN: $(ADO_TOKEN)
+                    ADO_ORG: $(ADO_ORG)
+
+
