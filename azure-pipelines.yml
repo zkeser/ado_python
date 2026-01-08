@@ -15,7 +15,7 @@ stages:
   - stage: Development
     displayName: Deploy to Development
     jobs:
-      - deployment: Deploy Job
+      - deployment: DeployJob
         displayName: Deploy to Dev
         environment: development
         strategy:
