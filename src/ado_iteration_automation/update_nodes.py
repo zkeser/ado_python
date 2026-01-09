@@ -17,7 +17,7 @@ def create_update_missing_parents(connection):
     #Update existing parents that have no dates with dates from YAML
     classifications = list_classification_nodes(get_connection())
     for classification in classifications.values():
-        for child in classification['children']:
+        for child in classification.get('children', []):
             if "attributes" not in child:
                 posted_node = WorkItemClassificationNode(
                     attributes={
@@ -27,11 +27,10 @@ def create_update_missing_parents(connection):
                 )
                 try:
                     wit_client.update_classification_node(posted_node, project=classification['name'], structure_group="iterations", path=child['name'])
-                    print(f"Updated parent iteration {child['name']} in project {classification['name']} with dates.")
+                    print(f"✅ Updated parent iteration {child['name']} in project {classification['name']} with dates.")
 
                 except Exception as e:
-                    print(f"Error updating iteration {child['name']} in project {classification['name']}: {e}")
-
+                    print(f"❌ Error updating iteration {child['name']} in project {classification['name']}: {e}")
 
     #Look for missing parents from YAML and create with attributes
     classifications = list_classification_nodes(get_connection())
@@ -53,10 +52,10 @@ def create_update_missing_parents(connection):
                 )
                 try:
                     wit_client.create_or_update_classification_node(posted_node, project_name, "iterations")
-                    print(f"Created missing node {missing_name} in project {project_name}")
+                    print(f"✅Created missing node {missing_name} in project {project_name}")
                 
                 except Exception as e:
-                    print(f"Error creating node {missing_name} in project {project_name}: {e}")
+                    print(f"❌Error creating node {missing_name} in project {project_name}: {e}")
         else:
             print(f"No missing parent iterations in project {project_name}")
         
@@ -64,7 +63,7 @@ def create_update_missing_parents(connection):
 
 
 # Create the remaining leaf iterations under their respective parents as needed
-def update_missing_leaf_nodes(connection):
+def update_leaf_nodes(connection):
     wit_client=connection.clients.get_work_item_tracking_client()
     leaf_list = read_yaml("ado_child_iterations_list")
     leaf_yaml_lookup = {item['iteration_name']: {"startDate": item["iteration_start_date"], "finishDate": item["iteration_end_date"]} for item in leaf_list}
@@ -77,6 +76,11 @@ def update_missing_leaf_nodes(connection):
             parent_name = child['name']
             for leaf in child.get('children', []):
                 leaf_name = leaf['name']
+
+                if leaf_name not in leaf_yaml_lookup:
+                    print(f"Skipping {leaf_name} as it is not in the YAML config.")
+                    continue
+                
                 if ("attributes" not in leaf or 
                     leaf['attributes'].get("startDate") != leaf_yaml_lookup[leaf['name']]["startDate"] or 
                     leaf['attributes'].get("finishDate") != leaf_yaml_lookup[leaf['name']]["finishDate"]):
@@ -89,10 +93,10 @@ def update_missing_leaf_nodes(connection):
                     try:
                         full_path = f"{parent_name}/{leaf_name}"
                         wit_client.update_classification_node(posted_node, project=classification['name'], structure_group="iterations", path=full_path)
-                        print(f"Updated leaf iteration {leaf['name']} in project {classification['name']} with dates.")
+                        print(f"✅ Updated leaf iteration {leaf['name']} in project {classification['name']} with dates.")
 
                     except Exception as e:
-                        print(f"Error updating iteration {leaf['name']} in project {classification['name']}: {e}")
+                        print(f"❌ Error updating iteration {leaf['name']} in project {classification['name']}: {e}")
 
 
     #Add remaining leaf iterations from YAML
@@ -112,7 +116,6 @@ def create_missing_leaf_nodes(connection):
         existing_leaf_names = set()
         for parent in data.get('children', []):
             for leaf in parent.get('children', []):
-                leaf_name = leaf['name']
                 existing_leaf_names.add(leaf['name'])
     
         missing_in_project = leaf_yaml_names - existing_leaf_names
@@ -134,7 +137,7 @@ def create_missing_leaf_nodes(connection):
                     try:
                         
                         wit_client.create_or_update_classification_node(posted_node, project=project_name, structure_group="iterations", path=leaf_info['parent_iteration_name'])
-                        print(f"Created missing leaf iterations in project {project_name}: {missing_in_project}")
+                        print(f"✅ Created missing leaf iterations in project {project_name}: {missing_in_project}")
                     except Exception as e:
                         print(f"Error creating leaf node {missing_leaf} in project {project_name}: {e}")
            

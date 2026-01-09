@@ -8,12 +8,13 @@ trigger: none
 pool:
   vmImage: 'ubuntu-latest'
 
-variables:
-- group: dev-vars
+
 
 stages:
   - stage: Development
     displayName: Deploy to Development
+    variables:
+    - group: dev-vars
     jobs:
       - deployment: DeployJob
         displayName: Deploy to Dev
@@ -26,6 +27,8 @@ stages:
                 - script: |
                     python -m pip install --upgrade pip
                     pip install azure-devops pyyaml
+                    printenv | grep ENV_VAR_FILE_NAME
+                    printenv | grep ADO_ORG
                   displayName: 'Install Dependencies'
                 - task: PythonScript@0
                   inputs:
@@ -34,5 +37,34 @@ stages:
                   env:
                     ADO_TOKEN: $(ADO_TOKEN)
                     ADO_ORG: $(ADO_ORG)
+                    ENV_VAR_FILE_NAME: $(ENV_VAR_FILE_NAME)
+  - stage: Production
+    displayName: Deploy to Production
+    variables:
+    - group: prod-vars
+    jobs:
+      - deployment: DeployJob
+        displayName: Deploy to Prod
+        environment: production
+        strategy:
+          runOnce:
+            deploy:
+              steps:
+                - checkout: self
+                - script: |
+                    python -m pip install --upgrade pip
+                    pip install azure-devops pyyaml
+                    printenv | grep ENV_VAR_FILE_NAME
+                    printenv | grep ADO_ORG
+                  displayName: 'Install Dependencies'
+                - task: PythonScript@0
+                  inputs:
+                    scriptSource: 'filePath'
+                    scriptPath: './src/main.py'
+                  env:
+                    ADO_TOKEN: $(ADO_TOKEN)
+                    ADO_ORG: $(ADO_ORG)
+                    ENV_VAR_FILE_NAME: $(ENV_VAR_FILE_NAME)
+
 
 

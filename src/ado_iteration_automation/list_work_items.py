@@ -28,7 +28,7 @@ def list_classification_nodes(connection):
                     all_data[project["name"]] = "No nodes found"
 
             except Exception as e:
-                print(f"Failed to fetch {project['name']}: {e}")
+                print(f"❌ Failed to fetch {project['name']}: {e}")
                 all_data[project['name']] = f"Error: {str(e)}"
     
     # pprint(all_data['AZ-400 Playground']['children']["name"])

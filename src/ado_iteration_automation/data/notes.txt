@@ -26,3 +26,6 @@ dict_keys(['url', '_links', 'attributes', 'has_children', 'children', 'id', 'ide
                 
     #             except Exception as e:
     #                 print(f"Error updating node {node_name} in project {project_name}: {e}")
+
+    {'attributes': {'finishDate': '2026-02-28T00:00:00Z',
+                'startDate': '2026-02-01T00:00:00Z'}
