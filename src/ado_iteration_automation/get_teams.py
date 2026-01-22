@@ -7,13 +7,14 @@ def get_teams(connection):
 
     extracted_teams = []
     blacklisted_projects = read_yaml("ado_project_blacklist")
+    blacklisted_teams = read_yaml("ado_team_blacklist")
     
     for team in get_teams_response:
         url_parts = team.url.rstrip('/').split('/')
         organization = url_parts[-6]
         project_id = url_parts[-3]
         team_id = url_parts[-1]
-        if project_id not in blacklisted_projects:
+        if project_id not in blacklisted_projects and team_id not in blacklisted_teams:
             extracted_teams.append({
                 "organization": organization,
                 "project_id": project_id,

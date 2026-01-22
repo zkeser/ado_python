@@ -4,6 +4,13 @@ ado_project_blacklist:
   # - b7d0863a-6743-4135-b79d-6af77f900b46
   # - allow-all-projects(commented out for testing)
 
+ado_team_blacklist:
+  # - 78a0700d-f61b-4ff6-84b2-3c1133ea0bde
+  # - b1d09ffb-df14-49ef-a63a-42d1986118f3
+  # - 32ce2a23-3821-430b-89f1-2f0965e7be63
+  # - 86e23688-16b4-4163-a615-c4de79a98a10
+  - "Allow All Teams(commented out for testing)"
+
 #Top-level Sprint Iterations
 ado_iterations_list:
   - iteration_name: "Sprint 1"

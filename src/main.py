@@ -13,4 +13,6 @@ if __name__ == "__main__":
     update_leaf_nodes(get_connection())
     create_missing_leaf_nodes(get_connection())
     assign_iterations_to_teams(get_connection(), get_teams(get_connection()))
-   
+    # pprint(get_teams(get_connection()), indent = 2)
+    # pprint(len(get_teams(get_connection())))
+    # pprint(get_project_lists(get_connection()), indent =2)   

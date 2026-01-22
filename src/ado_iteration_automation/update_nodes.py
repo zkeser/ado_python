@@ -17,20 +17,22 @@ def create_update_missing_parents(connection):
     #Update existing parents that have no dates with dates from YAML
     classifications = list_classification_nodes(get_connection())
     for classification in classifications.values():
-        for child in classification.get('children', []):
-            if "attributes" not in child:
+        for parent in classification.get('children', []):
+            if ("attributes" not in parent or 
+                parent['attributes']['startDate'] != yaml_lookup[parent['name']]["startDate"] or 
+                parent['attributes']['finishDate'] != yaml_lookup[parent['name']]["finishDate"]):
                 posted_node = WorkItemClassificationNode(
                     attributes={
-                        "startDate": yaml_lookup[child['name']]['startDate'],
-                        "finishDate": yaml_lookup[child['name']]['finishDate']
+                        "startDate": yaml_lookup[parent['name']]['startDate'],
+                        "finishDate": yaml_lookup[parent['name']]['finishDate']
                     }
                 )
                 try:
-                    wit_client.update_classification_node(posted_node, project=classification['name'], structure_group="iterations", path=child['name'])
-                    print(f"✅ Updated parent iteration {child['name']} in project {classification['name']} with dates.")
+                    wit_client.update_classification_node(posted_node, project=classification['name'], structure_group="iterations", path=parent['name'])
+                    print(f"✅ Updated parent iteration {parent['name']} in project {classification['name']} with dates.")
 
                 except Exception as e:
-                    print(f"❌ Error updating iteration {child['name']} in project {classification['name']}: {e}")
+                    print(f"❌ Error updating iteration {parent['name']} in project {classification['name']}: {e}")
 
     #Look for missing parents from YAML and create with attributes
     classifications = list_classification_nodes(get_connection())
